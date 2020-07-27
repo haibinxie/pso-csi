@@ -14,30 +14,11 @@ These features use native Kubernetes APIs to call the feature-set in the underly
 
 The following dependencies must be true before the snapshot and clone functionality can be used:
 
-* Kubernetes 1.17+ already running, deployed, configured, etc.
-* PSO correctly installed.
-* For the snapshot feature:
-    * The `VolumeSnapshotDataSource` feature gate is enabled by default since 1.17 (Beta) and therefore does not need to be set from this version onwards.
-    * PSO does not install Snapshot CRDs by default through helm. So please ensure the Snapshot CRDs and Controller are installed manually. Check [here](https://kubernetes-csi.github.io/docs/snapshot-controller.html) for installation details.
-* For the clone feature, the `VolumePVCDataSource` feature gate is enabled by default since 1.16 (Beta). This feature graduated to GA in 1.18 and is therefore no longer required in that and subsequent versions.
-
-### Validating Feature Gates
-
-To validate if your feature gates have been correctly set, check the `api-server` pod in the `kube-system` namespace for one of the nodes in the cluster:
-
-```
-kubectl describe -n kube-system pod kube-api-server-<node name> | grep feature-gates
-```
-
-This should result is the following if the feature gates are correctly set.
-
-```
- --feature-gates=VolumeSnapshotDataSource=True,VolumePVCDataSource=True
-```
+* For the snapshot feature PSO does not install the Snapshot CRDs by default through Helm. Please ensure the Snapshot CRDs and Controller by your Kubernetes deployment. If they aren't the refer to the [Kuberenetes CSI Snapshot documentation](https://kubernetes-csi.github.io/docs/snapshot-controller.html) for installation details.
 
 ### Examples
 
-Once you have correctly installed PSO on a Kubernetes deployment and the appropriate feature gates have been enabled the following examples can be used to show the use of the snapshot and clone functionality.
+Once you have correctly installed PSO on a Kubernetes deployment and validated that a snapshot controller and associated snapshot CRDs are installed, the following examples can be used to show the use of the snapshot and clone functionality.
 
 These examples start with the assumption that a PVC, called `pure-claim` has been created by PSO under a block related storage class, for example the `pure-block` storage class provided by the PSO installation.
 
